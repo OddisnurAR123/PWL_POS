@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('t_stok', function (Blueprint $table) {
+            $table->id('stok_id'); // Primary Key
+            $table->unsignedBigInteger('supplier_id')->index(); // Foreign Key
+            $table->unsignedBigInteger('barang_id')->index(); // Foreign Key
+            $table->unsignedBigInteger('user_id')->index(); // Foreign Key
+            $table->dateTime('stok_tanggal'); // Tanggal stok
+            $table->integer('stok_jumlah'); // Jumlah stok
+            $table->timestamps();
+
+            // Mendifinisikan foreign key constraint ke tabel supplier, barang, dan users
+            $table->foreign('supplier_id')->references('supplier_id')->on('m_supplier');
+            $table->foreign('barang_id')->references('barang_id')->on('m_barang');
+            $table->foreign('user_id')->references('user_id')->on('m_user');
+
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('t_stok');
+    }
+};
