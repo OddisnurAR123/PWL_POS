@@ -13,7 +13,7 @@ class LevelModel extends Model
     // Mendefinisikan nama tabel yang benar
     protected $table = 'm_level';
 
-    public function user(): BelongsTo
+    public function level(): BelongsTo
         {
         return $this->belongsTo( UserModel :: class, 'level_id', 'level_id');
         }
