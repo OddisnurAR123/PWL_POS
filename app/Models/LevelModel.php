@@ -12,6 +12,8 @@ class LevelModel extends Model
 
     // Mendefinisikan nama tabel yang benar
     protected $table = 'm_level';
+    protected $primaryKey = 'level_id';
+    protected $fillable = ['level_kode', 'level_nama'];
 
     public function level(): BelongsTo
         {
