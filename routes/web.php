@@ -8,6 +8,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\StokController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,16 @@ Route::get('/user/ubah{id}', [UserController::class, 'ubah']);
 Route::put('/user/ubah_simpan{id}', [UserController::class, 'ubah_simpan']);
 Route::get('/user/hapus{id}', [UserController::class, 'hapus']);
 
-Route::get('/', [WelcomeController::class, 'index']);
+
+Route::pattern('id', '[0-9]+'); //artinya ketika ada parameter {id}, maka harus berupa angka
+
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postLogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+
+Route::middleware(['auth'])->group(function () { // artinya semua route di dalam group ini harus login dulu
+
+    Route::get('/', [WelcomeController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index']);          // menampilkan halaman awal user
@@ -135,4 +145,5 @@ Route::group(['prefix' => 'stok'], function () {
     Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']);     // menyimpan perubahan data stok Ajax
     Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']); // menghapus data stok Ajax
     Route::delete('/{id}', [StokController::class, 'destroy']); // menghapus data stok
+});
 });
