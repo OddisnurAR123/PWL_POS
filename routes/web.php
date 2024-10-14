@@ -81,6 +81,8 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);     // menyimpan perubahan data barang Ajax
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']); // menghapus data barang Ajax
         Route::delete('/{id}', [BarangController::class, 'destroy']); // menghapus data barang
+        Route::get('/barang/import', [BarangController::class, 'import']); //ajax form upload excel
+        Route::post('/barang/import_ajax', [BarangController::class, 'import_ajax']); //ajax import excel
     });
 
     // artinya semua route di dalam group ini harus punya role ADM (Administrator), dan MNG (Manager)
