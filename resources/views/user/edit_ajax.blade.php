@@ -15,7 +15,7 @@
             </div>
         </div>
     @else
-        <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit">
+        <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -56,6 +56,14 @@
                                 password</small>
                             <small id="error-password" class="error-text form-text text-danger"></small>
                         </div>
+                        <div class="form-group">
+                            <label>Foto Profil</label>
+                            <input type="file" name="avatar" id="avatar" class="form-control"
+                                accept=".png,.jpg,.jpeg">
+                            <small class="form-text text-muted">Abaikan jika tidak ingin ubah
+                                foto</small>
+                            <small id="error-avatar" class="error-text form-text text-danger"></small>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
@@ -85,13 +93,19 @@
                         password: {
                             minlength: 6,
                             maxlength: 20
-                        }
+                        },
+                        avatar: {
+                            accept: "image/png,image/jpeg,image/jpg"
+                        },
                     },
                     submitHandler: function(form) {
+                        var formData = new FormData(form);
                         $.ajax({
                             url: form.action,
                             type: form.method,
-                            data: $(form).serialize(),
+                            data: formData,
+                            contentType: false,
+                            processData: false,
                             success: function(response) {
                                 if (response.status) {
                                     $('#myModal').modal('hide');

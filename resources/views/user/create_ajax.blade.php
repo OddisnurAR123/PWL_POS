@@ -1,11 +1,11 @@
-<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah"> 
+<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah" enctype="multipart/form-data">
     @csrf 
     <div id="modal-master" class="modal-dialog modal-lg" role="document"> 
         <div class="modal-content"> 
             <div class="modal-header"> 
                 <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5> 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span 
-    aria-hidden="true">&times;</span></button> 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
             </div> 
             <div class="modal-body"> 
                 <div class="form-group"> 
@@ -36,6 +36,11 @@
     control" required> 
                     <small id="error-password" class="error-text form-text text-danger"></small> 
                 </div> 
+                <div class="form-group">
+                    <label>Foto Profil</label>
+                    <input value="" type="file" name="avatar" id="avatar" class="form-control" accept=".png,.jpg,.jpeg">
+                    <small id="error-avatar" class="error-text form-text text-danger"></small>
+                </div>
             </div> 
             <div class="modal-footer"> 
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button> 
@@ -51,13 +56,16 @@
                     level_id: {required: true, number: true}, 
                     username: {required: true, minlength: 3, maxlength: 20}, 
                     nama: {required: true, minlength: 3, maxlength: 100}, 
-                    password: {required: true, minlength: 6, maxlength: 20} 
+                    password: {required: true, minlength: 6, maxlength: 20},
+                    foto: {accept: "png,jpg,jpeg"},
                 }, 
                 submitHandler: function(form) { 
                     $.ajax({ 
                         url: form.action, 
                         type: form.method, 
-                        data: $(form).serialize(), 
+                        data: formData,
+                            processData: false, //untuk menghandle file 
+                            contentType: false,
                         success: function(response) { 
                             if(response.status){ 
                                 $('#myModal').modal('hide'); 

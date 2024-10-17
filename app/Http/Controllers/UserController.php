@@ -170,6 +170,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -220,7 +221,7 @@ class UserController extends Controller
             // ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html 
             // ->make(true);
         
-            $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+            $users = UserModel::select('user_id', 'username', 'nama','avatar', 'level_id')
             ->with('level');
         // Filter data user berdasarkan level_id
         if ($request->level_id) {
@@ -402,7 +403,8 @@ public function store_ajax(Request $request)
                 'level_id'  => 'required|integer',
                 'username'  => 'required|string|min:3|unique:m_user,username',
                 'nama'      => 'required|string|max:100',
-                'password'  => 'required|min:6'
+                'password'  => 'required|min:6',
+                'avatar'    => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
             ];
             // use Illuminate\Support\Facades\Validator;
             $validator = Validator::make($request->all(), $rules);
@@ -414,6 +416,11 @@ public function store_ajax(Request $request)
                     'msgField'  => $validator->errors(), // pesan error validasi
                 ]);
             }
+
+            $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public'); // menyimpan file ke folder public/avatars
+        }
             UserModel::create($request->all());
             return response()->json([
                 'status'    => true,
@@ -431,46 +438,58 @@ public function edit_ajax(string $id)
     return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
 }
 
-public function update_ajax(Request $request, $id){ 
-    // cek apakah request dari ajax 
+public function update_ajax(Request $request, $id) { 
+    // Cek apakah request dari ajax 
     if ($request->ajax() || $request->wantsJson()) { 
         $rules = [ 
             'level_id' => 'required|integer', 
             'username' => 'required|max:20|unique:m_user,username,'.$id.',user_id', 
             'nama'     => 'required|max:100', 
-            'password' => 'nullable|min:6|max:20' 
+            'password' => 'nullable|min:6|max:20',
+            'avatar'   => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]; 
-    // use Illuminate\Support\Facades\Validator; 
-    $validator = Validator::make($request->all(), $rules); 
-    
-    if ($validator->fails()) { 
-        return response()->json([ 
-            'status'   => false,    // respon json, true: berhasil, false: gagal 
-            'message'  => 'Validasi gagal.', 
-            'msgField' => $validator->errors()  // menunjukkan field mana yang error 
-        ]); 
-    } 
 
-    $check = UserModel::find($id); 
-    if ($check) { 
-        if(!$request->filled('password') ){ // jika password tidak diisi, maka hapus dari request 
-            $request->request->remove('password'); 
-        } 
+        $validator = Validator::make($request->all(), $rules); 
         
-        $check->update($request->all()); 
-        return response()->json([ 
-            'status'  => true, 
-            'message' => 'Data berhasil diupdate' 
-        ]); 
-    } else{ 
-        return response()->json([ 
-            'status'  => false, 
-            'message' => 'Data tidak ditemukan' 
-        ]); 
-    } 
+        if ($validator->fails()) { 
+            return response()->json([ 
+                'status'   => false, 
+                'message'  => 'Validasi gagal.', 
+                'msgField' => $validator->errors()  
+            ]); 
+        } 
+
+        $check = UserModel::find($id); 
+        if ($check) {
+            // Menghapus password dari request jika tidak diisi
+            if (!$request->filled('password')) {
+                $request->request->remove('password');
+            }
+    
+            // Menyimpan avatar jika ada
+            if ($request->hasFile('avatar')) {
+                // Hapus file avatar yang lama jika ada
+                if ($check->avatar) {
+                    Storage::disk('public')->delete($check->avatar);
+                }
+                $avatarPath = $request->file('avatar')->store('avatars', 'public');
+                $request->merge(['avatar' => $avatarPath]); // Menambahkan path avatar ke request
+            }
+
+            $check->update($request->all()); 
+            return response()->json([ 
+                'status'  => true, 
+                'message' => 'Data berhasil diupdate' 
+            ]); 
+        } else { 
+            return response()->json([ 
+                'status'  => false, 
+                'message' => 'Data tidak ditemukan' 
+            ]); 
+        } 
     } 
     return redirect('/'); 
-    }
+}
 
 public function confirm_ajax(string $id)
 {
