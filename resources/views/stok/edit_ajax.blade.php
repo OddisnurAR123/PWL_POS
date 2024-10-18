@@ -111,7 +111,7 @@
                         },
                         stok_jumlah: {
                             required: true,
-                            minlength: 3,
+                            minlength: 2,
                         }
                     },
                     submitHandler: function(form) {

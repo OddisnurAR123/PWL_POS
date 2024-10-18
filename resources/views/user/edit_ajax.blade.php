@@ -91,7 +91,7 @@
                             maxlength: 100
                         },
                         password: {
-                            minlength: 6,
+                            minlength: 5,
                             maxlength: 20
                         },
                         avatar: {

@@ -24,7 +24,7 @@
                                 <option value="">- Pilih Kategori -</option>
                                 @foreach ($kategori as $item)
                                     <option value="{{ $item->kategori_id }}" @if ($item->kategori_id == $barang->kategori_id) selected @endif>
-                                        {{ $item->kategori_nama }}</option>
+                                        {{ $item->kategori_id }}</option>
                                 @endforeach
                             </select>
                             @error('kategori_id')

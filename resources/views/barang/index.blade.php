@@ -26,7 +26,7 @@ label">Filter</label>
 control-sm filter_kategori"> 
                                     <option value="">- Semua -</option> 
                                     @foreach($kategori as $l) 
-                                        <option value="{{ $l->kategori_id }}">{{ $l->kategori_nama }}</option> 
+                                        <option value="{{ $l->kategori_id }}">{{ $l->kategori_id }}</option> 
                                     @endforeach 
                                 </select> 
                                 <small class="form-text text-muted">Kategori Barang</small> 
@@ -44,7 +44,7 @@ control-sm filter_kategori">
             <table class="table table-bordered table-sm table-striped table-hover" 
             id="table-barang"> 
                         <thead> 
-                            <tr><th>No</th><th>Kode Barang</th><th>Kode Barang</th><th>Harga 
+                            <tr><th>No</th><th>Kode Barang</th><th>Nama Barang</th><th>Harga 
             Beli</th><th>Harga Jual</th><th>Kategori</th><th>Aksi</th></tr> 
                         </thead> 
                         <tbody></tbody> 
@@ -114,7 +114,7 @@ control-sm filter_kategori">
                     return new Intl.NumberFormat('id-ID').format(data); 
                 } 
             },{ 
-                data: "kategori.kategori_nama",  
+                data: "kategori.kategori_id",  
                 className: "", 
                 width: "14%", 
                 orderable: true, 
