@@ -9,6 +9,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\StokController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -37,6 +38,7 @@ Route::put('/user/ubah_simpan{id}', [UserController::class, 'ubah_simpan']);
 Route::get('/user/hapus{id}', [UserController::class, 'hapus']);
 
 
+
 Route::pattern('id', '[0-9]+'); //artinya ketika ada parameter {id}, maka harus berupa angka
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
@@ -44,6 +46,10 @@ Route::post('login', [AuthController::class, 'postLogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('register', [AuthController::class, 'register']);
 Route::post('register', [AuthController::class, 'store']);
+Route::get('/profile', [ProfileController::class, 'index']);
+Route::post('/profile/update', [ProfileController::class, 'update']);
+Route::post('/profile/update_data_diri{id}', [ProfileController::class, 'updateDataDiri']);
+Route::post('/profile/update_password', [ProfileController::class, 'updatePassword']);
 
 Route::middleware(['auth'])->group(function () { // artinya semua route di dalam group ini harus login dulu
 

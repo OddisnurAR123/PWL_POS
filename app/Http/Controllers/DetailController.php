@@ -71,7 +71,7 @@ class DetailController extends Controller
     public function create_ajax()
     {
         $barang = BarangModel::select('barang_id', 'barang_nama')->get();
-        $penjualan = PenjualanModel::select('penjualan_id', 'penjualan_id')->get();
+        $penjualan = PenjualanModel::select('penjualan_id', 'penjualan_kode')->get();
         return view('detail.create_ajax')
             ->with('barang', $barang)
             ->with('penjualan', $penjualan);

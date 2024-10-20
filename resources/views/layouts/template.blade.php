@@ -35,7 +35,7 @@
    <!-- Brand Logo -->
 <a href="{{ url('/') }}" class="brand-link">
   @if (Auth::check() && Auth::user()->avatar) 
-      <img src="{{ asset('storage/' . Auth::user()->avatar) }}" 
+      <img src="{{ asset('storage/avatars/' . Auth::user()->avatar) }}" 
            alt="Profile Picture" class="brand-image img-circle elevation-3">
   @else
       <img src="{{ asset('adminlte/dist/img/AdminLTELogo.png') }}" 

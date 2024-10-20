@@ -18,7 +18,7 @@ class PenjualanController extends Controller
     {
         $activeMenu = 'penjualan';
         $breadcrumb = (object) [
-            'title' => 'Data Penjualan',
+            'title' => 'Data Transaksi Penjualan',
             'list' => ['Home', 'Penjualan']
         ];
         $page = (object) [

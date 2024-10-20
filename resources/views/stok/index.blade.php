@@ -31,25 +31,8 @@
                                     <option value="{{ $item->supplier_id }}">{{ $item->supplier_nama }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-text text-muted">supplier stok</small>
+                            <small class="form-text text-muted">supplier</small>
                         </div>
-                        <div class="col-3">
-                            <select class="form-control" id="barang_id" name="barang_id" required>
-                                <option value="">- Semua -</option>
-                                @foreach ($barang as $item)
-                                    <option value="{{ $item->barang_id }}">{{ $item->barang_nama }}</option>
-                                @endforeach
-                            </select>
-                            <small class="form-text text-muted">barang stok</small>
-                        </div>
-                        <div class="col-3">
-                            <select class="form-control" id="user_id" name="user_id" required>
-                                <option value="">- Semua -</option>
-                                @foreach ($user as $item)
-                                    <option value="{{ $item->user_id }}">{{ $item->username }}</option>
-                                @endforeach
-                            </select>
-                            <small class="form-text text-muted">user</small>
                         </div>
                     </div>
                 </div>

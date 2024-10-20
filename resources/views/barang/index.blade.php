@@ -15,32 +15,23 @@ btn-success">Tambah Data (Ajax)</button>
         </div> 
         <div class="card-body"> 
             <!-- untuk Filter data --> 
-            <div id="filter" class="form-horizontal filter-date p-2 border-bottom mb-2"> 
-                <div class="row"> 
-                    <div class="col-md-12"> 
-                        <div class="form-group form-group-sm row text-sm mb-0"> 
-                            <label for="filter_date" class="col-md-1 col-form-
-label">Filter</label> 
-                            <div class="col-md-3"> 
-                                <select name="filter_kategori" class="form-control form-
-control-sm filter_kategori"> 
-                                    <option value="">- Semua -</option> 
-                                    @foreach($kategori as $l) 
-                                        <option value="{{ $l->kategori_id }}">{{ $l->kategori_id }}</option> 
-                                    @endforeach 
-                                </select> 
-                                <small class="form-text text-muted">Kategori Barang</small> 
-                            </div> 
-                        </div> 
-                    </div> 
-                </div> 
-            </div> 
-            @if(session('success')) 
-                <div class="alert alert-success">{{ session('success') }}</div> 
-            @endif 
-            @if(session('error')) 
-                <div class="alert alert-danger">{{ session('error') }}</div> 
-            @endif
+            <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+                <div class="row">
+                    <div class="col-3">
+                        <select class="form-control filter_kategori" id="filter_kategori" name="filter_kategori" required>
+                            <option value="">- Semua -</option>
+                            @foreach ($kategori as $item)
+                                <option value="{{ $item->skategori_id }}">{{ $item->kategori_id }}</option>
+                            @endforeach
+                        </select>
+                        <small class="form-text text-muted">kategori</small>
+                    </div>
             <table class="table table-bordered table-sm table-striped table-hover" 
             id="table-barang"> 
                         <thead> 
@@ -74,7 +65,7 @@ control-sm filter_kategori">
                         "dataType": "json", 
                         "type": "POST", 
                         "data": function (d) { 
-                            d.filter_kategori = $('.filter_kategori').val(); 
+                            d.kategori_id = $('.filter_kategori').val(); 
                         } 
                     }, 
                     columns: [{ 
