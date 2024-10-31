@@ -32,7 +32,7 @@ class ProfileController extends Controller
         }
     
         // Fetch user profile and levels
-        $profil = $user->profil; // Ensure that you have a relationship set up for this
+        $profile = $user->profile; // Ensure that you have a relationship set up for this
         $levels = LevelModel::all(); // Fetch all levels
     
         // Return the view with the necessary data
@@ -40,7 +40,7 @@ class ProfileController extends Controller
             'breadcrumb' => $breadcrumb,
             'page' => $page,
             'user' => $user,
-            'profile' => $profil,
+            'profile' => $profile,
             'levels' => $levels,
             'activeMenu' => $activeMenu
         ]);
@@ -69,39 +69,23 @@ class ProfileController extends Controller
 
         return redirect('/profile')->with('success', 'Foto Profil Berhasil Diperbarui!');
     }
-    public function updateDataDiri(Request $request, $id)
-{
-    // Validate input
-    $rules = [
-        'level_id' => 'nullable|integer',
-        'username' => 'nullable|max:20|unique:m_user,username,' . $id,
-        'nama' => 'nullable|max:100',
-    ];
 
-    // Run validation
-    $validator = Validator::make($request->all(), $rules);
-
-    // If validation fails, return error messages in JSON format
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Validasi Gagal',
-            'msgField' => $validator->errors(),
+    public function updateDataDiri(Request $request)
+    {
+        $user = Auth::user();
+        $request->validate([
+            'username' => 'required|string|min:3',
+            'nama' => 'required|string|max:100',
         ]);
+
+        // Update informasi pengguna
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        /** @var \App\Models\User $user **/
+        $user->save();
+
+        return redirect('/profile')->with('success', 'Data Diri Berhasil Diperbarui!');
     }
-
-    // Find the user by ID
-    $user = UserModel::find($id); // Use the ID parameter directly
-
-    // Update user information
-    $user->update([
-        'level_id'  => $request->level_id,
-        'username'  => $request->username,
-        'nama'      => $request->nama,
-    ]);
-
-    return redirect('/profile')->with('success', 'Data Diri Berhasil Diperbarui!');
-}
 
     public function updatePassword(Request $request)
     {

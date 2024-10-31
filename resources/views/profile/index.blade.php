@@ -20,7 +20,6 @@
                 <img src="{{ auth()->user()->avatar ? asset('storage/avatars/' . auth()->user()->avatar) : asset('default-avatar.png') }}"
                      class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px;" alt="Avatar">
                 <h3 class="profile-username text-center">{{ auth()->user()->nama }}</h3>
-                <p class="text-muted text-center">{{ auth()->user()->level }}</p>
             </div>
 
             <!-- Form to change profile picture -->
@@ -45,7 +44,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="active tab-pane" id="editdatadiri">
-                            <form action="{{ url('/profile/update_data_diri', Auth::user()->id) }}" method="POST">
+                            <form action="{{ url('profile/update_data_diri/' . Auth::user()->user_id) }}" method="POST">
                                 @csrf
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Username</label>
@@ -53,34 +52,28 @@
                                         <input type="text" name="username" class="form-control" value="{{ Auth::user()->username }}" required>
                                     </div>
                                 </div>
-
+                                
                                 <div class="form-group row">
                                     <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                                     <div class="col-sm-10">
                                         <input type="text" name="nama" id="nama" class="form-control" value="{{ Auth::user()->nama }}" required>
                                     </div>
                                 </div>
-
+                
                                 <div class="form-group row">
-                                    <label for="level" class="col-sm-2 col-form-label">Level</label>
+                                    <label for="level" class="col-sm-2 col-form-label">Level Pengguna</label>
                                     <div class="col-sm-10">
-                                        <select name="level_id" id="level" class="form-control" required>
-                                            @foreach($levels as $level)
-                                                <option value="{{ $level->id }}" {{ Auth::user()->level_id == $level->id ? 'selected' : '' }}>
-                                                    {{ $level->level_nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" id="level" class="form-control" value="{{ Auth::user()->level->level_nama }}" readonly>
                                     </div>
                                 </div>
-                                
+                
                                 <div class="form-group row">
                                     <div class="col-sm-10 offset-sm-2">
                                         <button type="submit" class="btn btn-primary">Update Profile</button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
+                            </form>                            
+                        </div>               
 
                         <div class="tab-pane" id="editpw">
                             <form action="{{ url('/profile/update_password') }}" method="POST" class="form-horizontal">

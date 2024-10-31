@@ -46,14 +46,15 @@ Route::post('login', [AuthController::class, 'postLogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('register', [AuthController::class, 'register']);
 Route::post('register', [AuthController::class, 'store']);
-Route::get('/profile', [ProfileController::class, 'index']);
-Route::post('/profile/update', [ProfileController::class, 'update']);
-Route::post('/profile/update_data_diri{id}', [ProfileController::class, 'updateDataDiri']);
-Route::post('/profile/update_password', [ProfileController::class, 'updatePassword']);
 
 Route::middleware(['auth'])->group(function () { // artinya semua route di dalam group ini harus login dulu
 
     Route::get('/', [WelcomeController::class, 'index']);
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::post('/profile/update_avatar', [ProfileController::class, 'update']);
+    Route::post('/profile/update_data_diri/{user}', [ProfileController::class, 'updateDataDiri']);
+    Route::post('/profile/update_password', [ProfileController::class, 'updatePassword']);
+    
     Route::middleware(['authorize:ADM'])->group(function(){
         Route::get('/user', [UserController::class, 'index']);          // menampilkan halaman awal user
         Route::post('/user/list', [UserController::class, 'list']);      // menampilkan data user dalam bentuk json untuk datatables
