@@ -53,7 +53,7 @@ class BarangController extends Controller
         //     })
         //     ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html
         //     ->make(true);
-        $barang = BarangModel::select('barang_id', 'kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+        $barang = BarangModel::select('barang_id', 'kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual','image')
             ->with('kategori');
 
         if ($request->kategori_id) {
@@ -97,13 +97,18 @@ class BarangController extends Controller
             'barang_nama'   => 'required|string|max:100', //nama harus diisi, berupa string, dan maksimal 100 karakter
             'harga_beli'    => 'required|string|max:100', //nama harus diisi, berupa string, dan maksimal 100 karakter
             'harga_jual'    => 'required|string|max:100', //nama harus diisi, berupa string, dan maksimal 100 karakter
+            'image'         => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        $imagePath = $request->file('image')->store('images', 'public');
+
         BarangModel::create([
             'kategori_id'   => $request-> kategori_id,
             'barang_kode'   => $request-> barang_kode,
             'barang_nama'   => $request-> barang_nama,
             'harga_beli'    => $request-> harga_beli,
-            'harga_jual'    => $request-> harga_jual
+            'harga_jual'    => $request-> harga_jual,
+            'image'         => $imagePath
         ]);
         return redirect('/barang')->with('success', 'Data Barang berhasil disimpan');
     }
@@ -146,13 +151,18 @@ class BarangController extends Controller
             'barang_nama'   => 'required|string|max:100', //nama harus diisi, berupa string, dan maksimal 100 karakter
             'harga_beli'    => 'required|string|max:100', //nama harus diisi, berupa string, dan maksimal 100 karakter
             'harga_jual'    => 'required|string|max:100', //nama harus diisi, berupa string, dan maksimal 100 karakter
+            'image'         => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+        
+        $imagePath = $request->file('image')->store('image', 'public');
+
         BarangModel::find($id)->update([
             'kategori_id'   => $request-> kategori_id,
             'barang_kode'   => $request-> barang_kode,
             'barang_nama'   => $request-> barang_nama,
             'harga_beli'    => $request-> harga_beli,
-            'harga_jual'    => $request-> harga_jual
+            'harga_jual'    => $request-> harga_jual,
+            'image'         => $imagePath
         ]);
         return redirect('/barang')->with("success", "Data Barang berhasil diubah");
     }

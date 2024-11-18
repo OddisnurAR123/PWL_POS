@@ -33,7 +33,9 @@
                         <th>Jumlah</th>
                         <td>{{ $detail->jumlah }}</td>
                     </tr>
-                    
+                    <th>Gambar:</th>
+                        <td><img src="{{ asset ($barang->image) }}" alt="Gambar {{ $barang->barang_nama }}" width="150" height="150">
+                        </td>
                 </table>
             @endempty
             <a href="{{ url('detail') }}" class="btn btn-sm btn-default mt-2">Kembali</a>

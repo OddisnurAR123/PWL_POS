@@ -27,6 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request){
 });
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 
+Route::middleware('auth:api')->group(function(){
 //Level
 Route::get('levels', [LevelController::class, 'index']);
 Route::post ('levels', [LevelController::class, 'store']);
@@ -54,3 +55,4 @@ Route::post ('barangs', [BarangController::class, 'store']);
 Route::get('barangs/{barang}', [BarangController::class, 'show']);
 Route::put('barangs/{barang}', [BarangController::class, 'update']);
 Route::delete('barangs/{barang}', [BarangController::class, 'destroy']);
+});
